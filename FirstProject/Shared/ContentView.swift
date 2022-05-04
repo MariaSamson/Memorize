@@ -60,7 +60,7 @@ struct ContentView: View {
         label:{
             VStack{
               Image(systemName: "face.smiling").font(.largeTitle)
-              Text("Vehicles")
+              Text("Faces")
             }
         }
         }}

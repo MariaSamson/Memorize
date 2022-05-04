@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		061018A328215811004F47A1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061018A228215811004F47A1 /* Theme.swift */; };
-		061018A428215811004F47A1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061018A228215811004F47A1 /* Theme.swift */; };
 		0696745B2820278C00B7B005 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0696745A2820278C00B7B005 /* Tests_iOS.swift */; };
 		0696745D2820278C00B7B005 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0696745C2820278C00B7B005 /* Tests_iOSLaunchTests.swift */; };
 		069674672820278C00B7B005 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069674662820278C00B7B005 /* Tests_macOS.swift */; };
@@ -39,7 +37,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		061018A228215811004F47A1 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		069674422820278900B7B005 /* FirstProjectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstProjectApp.swift; sourceTree = "<group>"; };
 		069674432820278900B7B005 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		069674442820278C00B7B005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -102,7 +99,6 @@
 			children = (
 				069674422820278900B7B005 /* FirstProjectApp.swift */,
 				069674432820278900B7B005 /* ContentView.swift */,
-				061018A228215811004F47A1 /* Theme.swift */,
 				069674442820278C00B7B005 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -303,7 +299,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				061018A328215811004F47A1 /* Theme.swift in Sources */,
 				0696746C2820278C00B7B005 /* ContentView.swift in Sources */,
 				0696746A2820278C00B7B005 /* FirstProjectApp.swift in Sources */,
 			);
@@ -313,7 +308,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				061018A428215811004F47A1 /* Theme.swift in Sources */,
 				0696746D2820278C00B7B005 /* ContentView.swift in Sources */,
 				0696746B2820278C00B7B005 /* FirstProjectApp.swift in Sources */,
 			);
