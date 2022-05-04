@@ -16,19 +16,7 @@ struct ContentView: View {
     
     //EXTRA CREDIT - 1.
     @State var emojiCount = Int.random(in: 4...11)
-    
-    func widthThatBestFits(cardCount: Int) -> CGFloat{
-        switch cardCount {
-            case 4:
-                return 110
-            case 5...9:
-                return 80
-            case 10...14:
-                return 68
-            default:
-                return 65
-            }
-     }
+
     var body: some View {
         VStack{
             Text("Memorize!").font(.largeTitle)
@@ -80,7 +68,6 @@ struct ContentView: View {
       }
     }
     
-    
     var flagTheme: some View{
       VStack{
         Button {
@@ -98,6 +85,19 @@ struct ContentView: View {
     func RandomCard() -> Int{
         Int.random(in: 4...9)
     }
+    
+    func widthThatBestFits(cardCount: Int) -> CGFloat{
+        switch cardCount {
+            case 4:
+                return 110
+            case 5...9:
+                return 80
+            case 10...14:
+                return 68
+            default:
+                return 65
+            }
+     }
 }
 
 struct CardView: View{
