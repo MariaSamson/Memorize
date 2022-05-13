@@ -14,116 +14,115 @@ struct ContentView: View {
     var animals = ["🐶","🐻","🐝","🦊","🐥","🐷","🐒","🐠","🐬","🐙","🐸"]
     var flags = ["🇦🇩","🇺🇸","🏳","🇹🇩","🇻🇳","🏳️‍🌈","🏳️‍⚧️","🇺🇳","🇨🇦","🇪🇺","🇮🇹"]
     
-    //EXTRA CREDIT - 1.
-    @State var emojiCount = Int.random(in: 4...11)
-
+    // EXTRA CREDIT - 1.
+    @State var emojiCount = 11 // Int.random(in: 4...11)
+    
     var body: some View {
-        VStack{
+        VStack {
             Text("Memorize!").font(.largeTitle)
-        ScrollView{
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: widthThatBestFits(cardCount: emojiCount)))]) {
-                ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
-                      CardView(content: emoji).aspectRatio(2/3,contentMode: .fit)
-                  }
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: widthThatBestFits(cardCount: emojiCount), maximum: 1200))]) {
+                    ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+                        CardView(content: emoji).aspectRatio(2/3,contentMode: .fit)
+                    }
+                }
             }
-        }
-       .foregroundColor(.red)
-       Spacer()
-          HStack(spacing: 60){
-          facesTheme
-          animalsTheme
-          flagTheme
-         }
-       .font(.subheadline)
-       .padding(.horizontal)
+            .foregroundColor(.red)
+            Spacer()
+            HStack(spacing: 60) {
+                facesTheme
+                animalsTheme
+                flagTheme
+            }
+            .font(.subheadline)
+            .padding(.horizontal)
         }
         .padding(.horizontal)
     }
-    var facesTheme: some View{
-        VStack{
-            Button {
-                emojiCount=RandomCard()
-                emojis = faces.shuffled()
-             }
-        label:{
-            VStack{
-              Image(systemName: "face.smiling").font(.largeTitle)
-              Text("Faces")
-            }
-        }
-        }}
-
     
-    var animalsTheme: some View{
-      VStack{
-          Button {
-              emojiCount=RandomCard()
-              emojis = animals.shuffled()
-          } label: {
-            VStack{
-              Image(systemName: "pawprint").font(.largeTitle)
-              Text("Animals")
+    var facesTheme: some View {
+        VStack {
+            Button {
+                emojiCount = randomCardNumber()
+                emojis = faces.shuffled()
+            }
+            label: {
+                VStack {
+                    Image(systemName: "face.smiling").font(.largeTitle)
+                    Text("Faces")
+                }
             }
         }
-      }
     }
     
-    var flagTheme: some View{
-      VStack{
-        Button {
-            emojiCount=RandomCard()
-            emojis = flags.shuffled()
-        } label: {
-            VStack{
-                Image(systemName: "flag").font(.largeTitle)
-                Text("Flags")
+    var animalsTheme: some View {
+        VStack {
+            Button {
+                emojiCount = randomCardNumber()
+                emojis = animals.shuffled()
+            } label: {
+                VStack {
+                    Image(systemName: "pawprint").font(.largeTitle)
+                    Text("Animals")
+                }
             }
         }
-      }
-   }
+    }
     
-    func RandomCard() -> Int{
+    var flagTheme: some View {
+        VStack {
+            Button {
+                emojiCount = randomCardNumber()
+                emojis = flags.shuffled()
+            } label: {
+                VStack {
+                    Image(systemName: "flag").font(.largeTitle)
+                    Text("Flags")
+                }
+            }
+        }
+    }
+    
+    func randomCardNumber() -> Int {
         Int.random(in: 4...9)
     }
     
-    func widthThatBestFits(cardCount: Int) -> CGFloat{
+    func widthThatBestFits(cardCount: Int) -> CGFloat {
         switch cardCount {
-            case 4:
-                return 110
-            case 5...9:
-                return 80
-            case 10...14:
-                return 68
-            default:
-                return 65
-            }
-     }
+        case 4:
+            return 110
+        case 5...9:
+            return 80
+        case 10...14:
+            return 68
+        default:
+            return 65
+        }
+    }
 }
 
-struct CardView: View{
-    var content : String
-    @State var isFaceUp : Bool = true
+struct CardView: View {
+    var content: String
+    @State var isFaceUp: Bool = true
     var body: some View{
         ZStack{
             let shape = RoundedRectangle(cornerRadius: 20)
-          if isFaceUp {
-            shape.fill().foregroundColor(.white)
-            shape.strokeBorder(lineWidth: 3)
-            Text(content).font(.largeTitle)
-          }else
-            {
-              shape.fill()
-          }
+            if isFaceUp {
+                shape.fill().foregroundColor(.white)
+                shape.strokeBorder(lineWidth: 3)
+                Text(content).font(.largeTitle)
+            } else {
+                shape.fill()
+            }
         }
         .onTapGesture {
             isFaceUp = !isFaceUp
         }
     }
 }
-struct ContentView_Preview: PreviewProvider{
+struct ContentView_Preview: PreviewProvider {
     static var previews: some View{
         ContentView()
             .preferredColorScheme(.light)
     }
 }
-
