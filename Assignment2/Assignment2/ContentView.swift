@@ -37,7 +37,7 @@ struct ContentView: View {
         .padding(.horizontal)
     }
     
-    var newTheme: some View{
+    var newTheme: some View {
           VStack{
               Button {
                   viewModel.beginNewGame()
@@ -49,12 +49,12 @@ struct ContentView: View {
             }
           }
         }
-}
+    }
 
-struct CardView: View{
+struct CardView: View {
     let card: MemoryGame<String>.Card
     
-    var body: some View{
+    var body: some View {
         ZStack{
             let shape = RoundedRectangle(cornerRadius: 20)
             if card.isFaceUp {
@@ -69,6 +69,7 @@ struct CardView: View{
         }
     }
 }
+
 struct ContentView_Preview: PreviewProvider{
     static var previews: some View{
         let game = EmojiMemoryGame()

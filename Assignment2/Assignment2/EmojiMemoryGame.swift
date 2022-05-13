@@ -11,64 +11,68 @@ import SwiftUI
 class EmojiMemoryGame: ObservableObject {
 
     var theme: Theme
-        
-    init(){
+
+    init() {
         theme = EmojiMemoryGame.themes.randomElement()!
         theme.emoji.shuffle()
         model = EmojiMemoryGame.createMemoryGame(theme: theme)
     }
     
-    static var themes : [Theme] = [
-        Theme(name: "Flags", emoji: ["🇦🇩","🇺🇸","🏳","🇹🇩","🇻🇳","🏳️‍🌈","🏳️‍⚧️","🇺🇳","🇨🇦","🇪🇺","🇮🇹"], numberOfCards: 4, color: "blue"),
-          Theme(name: "Faces", emoji: ["🤩","😍","🥳","😅","🤓","😎","😚","😏","😇","🤫","🫠"], numberOfCards: 4, color: "black"),
-          Theme(name: "Animals", emoji: ["🐶","🐻","🐝","🦊","🐥","🐷","🐒","🐠","🐬","🐙","🐸"], numberOfCards: 6, color: "mint"),
-          Theme(name: "Fruits", emoji: ["🍏","🍎","🍋","🍉","🥥","🥝","🍒"], numberOfCards: 8, color: "pink"),
+    static var themes: [Theme] = [
+          Theme(name: "Flags", emoji: ["🇺🇸","🏳","🇹🇩","🏳️‍🌈","🇺🇳","🇨🇦","🇪🇺","🇮🇹"], numberOfCards: 4, color: "blue"),
+          Theme(name: "Faces", emoji: ["🤩","😍","🥳","😅","🤓","😎","😚","😏","😇"], numberOfCards: 8, color: "black"),
+          Theme(name: "Animals", emoji: ["🐶","🐻","🐝","🦊","🐥","🐷","🐬","🐙","🐸"], numberOfCards: 6, color: "mint"),
+          Theme(themeName: "Fruits", themeEmoji: ["🍏","🍎","🍋","🍉","🥥","🥝","🍒"], themeColor: "pink"),
           Theme(name: "Cars", emoji: ["🚗","🚙","🚑"], numberOfCards: 8, color: "green"),
           Theme(name: "Travel", emoji: ["✈️","🏝","🌇","🚢","🏙"], numberOfCards: 8, color: "gray")]
   
-    var themeColorForCards: Color{
-        if theme.color == "blue"{
+    var themeColorForCards: Color {
+        if theme.color == "blue" {
             return .blue
         }
-        else if theme.color == "black"{
+        else if theme.color == "black" {
             return .black
         }
-        else if theme.color == "mint"{
+        else if theme.color == "mint" {
             return .mint
         }
-        else if theme.color == "pink"{
-            return .pink
+        else if theme.color == "pink" {
+            return Color(red: 239.0 / 255, green: 120.0 / 255, blue: 221.0 / 255)
         }
-        else if theme.color == "gray"{
+        else if theme.color == "gray" {
             return .gray
         }
-        else{
+        else {
             return .green
         }
     }
         
-    var cardsName: String{
+    var cardsName: String {
         return theme.name
     }
 
-    var scoreCards : Int{
+    var scoreCards: Int {
         return model.score
     }
     
-    static func createMemoryGame(theme: Theme) ->MemoryGame<String>{
-          MemoryGame<String>(numberOfPairsOfCards: theme.numberOfCards) { pairIndex in
-               return theme.emoji[pairIndex]
+    //EXTRA CREDIT
+    static func createMemoryGame(theme: Theme) -> MemoryGame<String> {
+        var numberOfPairsOfCards = theme.numberOfCards
+//          MemoryGame<String>(numberOfPairsOfCards: theme.numberOfCards) {
+//              pairIndex in
+//          return theme.emoji[pairIndex]
+        if theme.name == "Flags" || theme.name == "Travel" {
+            numberOfPairsOfCards = Int.random(in: 4...theme.emoji.count)
         }
-    }
-    
+        return MemoryGame(numberOfPairsOfCards: numberOfPairsOfCards ?? theme.emoji.count){ theme.emoji[$0]
+        }
+   }
     
     @Published private var model: MemoryGame<String>
     
-    var cards: Array<MemoryGame<String>.Card>{
+    var cards: Array<MemoryGame<String>.Card> {
         model.cards
     }
-    
-    //MARK - Intent(s)
     
     func choose(_ card: MemoryGame<String>.Card)
     {
@@ -82,6 +86,4 @@ class EmojiMemoryGame: ObservableObject {
         theme.emoji.shuffle()
         model = EmojiMemoryGame.createMemoryGame(theme: theme)
     }
-    
-
 }
