@@ -12,7 +12,10 @@ struct Game {
     
     private(set) var deck = Deck()
     private(set) var dealedCards: [Card] = []
-    
+   
+    var cardsRemainingInDeck: Int {
+        deck.countRemainingCards
+    }
     
     mutating func addCard() -> Card? {
         guard let card = deck.drawCard() else {
@@ -23,55 +26,62 @@ struct Game {
         return card
     }
     
-    mutating func choose(_ card: Card) -> Bool {
-        GameViewModel.gameMatchState = .notSet
+    mutating func choose(_ card: Card){
+        
         let selectedCards = dealedCards.filter { $0.isSelected }
         if selectedCards.count == 3 {
+             _ = checkIfCardsMatch()
             // Replace matched cards with new ones
             for card in selectedCards {
-                guard let index = dealedCards.firstIndex(matching: card) else {
-                    print("\(card) suddenly disappeared!?")
-                    continue
-                }
+                let index = dealedCards.firstIndex(matching: card)
                 if GameViewModel.gameMatchState == .cardsAreMatched {
-                    dealedCards.remove(at: index)
-                    
+                    dealedCards.remove(at: index!)
                     if let newCard = deck.drawCard() {
-                        dealedCards.insert(newCard, at: index)
+                        dealedCards.insert(newCard, at: index!)
                     }
-                }
-                else {
-                    dealedCards[index].isSelected.toggle()
+                } else {
+                    dealedCards[index!].isSelected.toggle()
                 }
             }
-
-//            if dealedCards.isEmpty {
-//                return .noMoreCards
-//            }
         }
 
         let index = dealedCards.firstIndex(matching: card)
-        dealedCards[index!].isSelected.toggle()
-      
-       return checkIfCardsMatch()
+        dealedCards[index ?? 0].isSelected.toggle()
     }
     
     mutating func checkIfCardsMatch() -> Bool {
         let selectedCards = dealedCards.filter { $0.isSelected }
-        
         if selectedCards.count == 3 {
-            if (selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number ||
-                selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue ||
-                selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue ||
-                selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue) {
+            if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
+                selectedCards[0].shape.rawValue != selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue != selectedCards[2].shape.rawValue &&
+                selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
+                selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
                 GameViewModel.gameMatchState = .cardsAreMatched
               return true
-           }
+            } else if selectedCards[0].number != selectedCards[1].number && selectedCards[1].number != selectedCards[2].number &&
+                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
+                    selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
+                    selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
+                    GameViewModel.gameMatchState = .cardsAreMatched
+                  return true
+            } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
+                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
+                    selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
+                    selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
+                    GameViewModel.gameMatchState = .cardsAreMatched
+                  return true
+            } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
+                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
+                    selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
+                    selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
+                    GameViewModel.gameMatchState = .cardsAreMatched
+                  return true
+                }
             else {
                 GameViewModel.gameMatchState = .cardsAreNotMatched
             }
         }
-
+        
         return false
     }
     
@@ -103,8 +113,6 @@ struct Game {
         }
     }
     
-
-
     struct Card: Identifiable {
         var id : Int
         var number: Number
@@ -113,13 +121,11 @@ struct Game {
         var shading: Shading
         
         var isFaceUp = true
-        var isMatched = false
-        
         var isSelected : Bool = false
   
     }
 
-struct Deck {
+  struct Deck {
         private var cards: [Card] = []
         
         init() {
@@ -141,6 +147,10 @@ struct Deck {
             }
             return cards.removeFirst()
         }
+      
+       var countRemainingCards: Int {
+           cards.count
+       }
     }
 }
 

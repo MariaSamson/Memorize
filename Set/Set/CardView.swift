@@ -32,7 +32,7 @@ struct Diamond:Shape {
 
 struct CardView: View {
     var card: Game.Card
-    var isMismatched: Bool = true
+    //var isMismatched: Bool = true
 
     private let cornerRadius: CGFloat = 10
     private let edgeLineWidth: CGFloat = 4
@@ -43,7 +43,7 @@ struct CardView: View {
         }
     }
 
-    func body(for size: CGSize) -> some View{
+    func body(for size: CGSize) -> some View {
         let symbolCount = card.number.rawValue
        
         return ZStack {
@@ -51,7 +51,6 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(Color.white)
                 
-
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(lineWidth: edgeLineWidth)
 
@@ -115,16 +114,4 @@ struct CardView: View {
                 return Color.green
         }
     }
-
 }
-
-
-//struct CardView_Previews: PreviewProvider {
-//    static let game = GameViewModel()
-//    static var previews: some View {
-//        game.drawCard(12)
-//        let card = game.cards.first!
-//        return CardView(card: card)
-//            .previewLayout(.fixed(width: 100, height: 100))
-//    }
-//}

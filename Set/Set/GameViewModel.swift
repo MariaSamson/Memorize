@@ -12,6 +12,10 @@ class GameViewModel: ObservableObject {
     @Published var model = Game()
     static var gameMatchState: StateOfCards = .notSet
     
+    //count remaining card in Deck
+    var cardsRemaining: Int {
+        model.cardsRemainingInDeck
+    }
     
     var cards: [Game.Card] {
         return model.dealedCards
@@ -35,15 +39,15 @@ class GameViewModel: ObservableObject {
     func dealMoreCards() {
         drawCard(3)
     }
-    
+     
     var statusText: String {
-        switch GameViewModel.gameMatchState {
+       switch GameViewModel.gameMatchState {
         case .cardsAreMatched:
             return "Is a match"
         case .cardsAreNotMatched:
             return "Is not a match"
-        default:
-            return "Just choose 3 cards"
+        case .notSet:
+            return "Choose 3 cards"
     }
   }
     
