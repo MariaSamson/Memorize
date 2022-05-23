@@ -33,7 +33,7 @@ class GameViewModel: ObservableObject {
     }
     
     func choose(_ card: Game.Card) {
-        model.choose(card)
+       let _ = model.choose(card)
     }
     
     func dealMoreCards() {
