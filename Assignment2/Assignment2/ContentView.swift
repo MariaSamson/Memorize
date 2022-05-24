@@ -18,7 +18,7 @@ struct ContentView: View {
         ScrollView{
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
                 ForEach(viewModel.cards) { card in
-                      CardView(card: card)
+                    CardView(card: card, gradient: Gradient(colors: [self.viewModel.themeColorForCards, .pink]))
                         .aspectRatio(2/3,contentMode: .fit)
                         .onTapGesture {
                             viewModel.choose(card)
@@ -53,6 +53,7 @@ struct ContentView: View {
 
 struct CardView: View {
     let card: MemoryGame<String>.Card
+    let gradient: Gradient
     
     var body: some View {
         ZStack{
@@ -61,14 +62,15 @@ struct CardView: View {
             shape.fill().foregroundColor(.white)
             shape.strokeBorder(lineWidth: 3)
             Text(card.content).font(.largeTitle)
-            }else if card.isMatched{
-                shape.opacity(0)
             }else {
-              shape.fill()
+                if !card.isMatched {
+                    RoundedRectangle(cornerRadius: 10.0)
+                        .fill(LinearGradient(gradient: gradient, startPoint: .topLeading, endPoint: .bottomTrailing))
+                }
+            }
           }
         }
     }
-}
 
 struct ContentView_Preview: PreviewProvider{
     static var previews: some View{

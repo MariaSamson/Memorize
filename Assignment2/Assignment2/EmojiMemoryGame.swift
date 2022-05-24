@@ -19,12 +19,12 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     static var themes: [Theme] = [
-          Theme(name: "Flags", emoji: ["🇺🇸","🏳","🇹🇩","🏳️‍🌈","🇺🇳","🇨🇦","🇪🇺","🇮🇹"], numberOfCards: 4, color: "blue"),
-          Theme(name: "Faces", emoji: ["🤩","😍","🥳","😅","🤓","😎","😚","😏","😇"], numberOfCards: 8, color: "black"),
-          Theme(name: "Animals", emoji: ["🐶","🐻","🐝","🦊","🐥","🐷","🐬","🐙","🐸"], numberOfCards: 6, color: "mint"),
+          Theme(name: "Flags", emoji: ["🇺🇸","🏳","🇹🇩","🏳️‍🌈","🇺🇳","🇨🇦","🇪🇺","🇮🇹"], color: "blue", numberOfPairsCards: 4),
+          Theme(name: "Faces", emoji: ["🤩","😍","🥳","😅","🤓","😎","😚","😏","😇"], color: "black", numberOfPairsCards: 8),
+          Theme(name: "Animals", emoji: ["🐶","🐻","🐝","🦊","🐥","🐷","🐬","🐙","🐸"], color: "mint", numberOfPairsCards: 6),
           Theme(themeName: "Fruits", themeEmoji: ["🍏","🍎","🍋","🍉","🥥","🥝","🍒"], themeColor: "pink"),
-          Theme(name: "Cars", emoji: ["🚗","🚙","🚑"], numberOfCards: 8, color: "green"),
-          Theme(name: "Travel", emoji: ["✈️","🏝","🌇","🚢","🏙"], numberOfCards: 8, color: "gray")]
+          Theme(name: "Cars", emoji: ["🚗","🚙","🚑"], color: "green", numberOfPairsCards: 8),
+          Theme(name: "Travel", emoji: ["✈️","🏝","🌇","🚢","🏙"], color: "gray", numberOfPairsCards: 8)]
   
     var themeColorForCards: Color {
         if theme.color == "blue" {
@@ -57,7 +57,7 @@ class EmojiMemoryGame: ObservableObject {
     
     //EXTRA CREDIT
     static func createMemoryGame(theme: Theme) -> MemoryGame<String> {
-        var numberOfPairsOfCards = theme.numberOfCards
+        var numberOfPairsOfCards = theme.numberOfPairsCards
 //          MemoryGame<String>(numberOfPairsOfCards: theme.numberOfCards) {
 //              pairIndex in
 //          return theme.emoji[pairIndex]

@@ -18,22 +18,28 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }), !cards[chosenIndex].isFaceUp, !cards[chosenIndex].isMatched
            {
-            let currentDataTime = Date()
+          //  let currentDataTime = Date()
             if let potentialMatchIndex = indexOfTheOneAndOnlyDFaceUpCard {
+                cards[chosenIndex].seen += 1
+                cards[potentialMatchIndex].seen += 1
                 if  cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                     
-                    //score += 2
-                    value = Int(currentDataTime.distance(to: lastTimeCardsMatch))
-                    score += max(Int(10 - value), 1)*2
-                    lastTimeCardsMatch = Date()
+                     score += 2
+                 //   value = Int(currentDataTime.distance(to: lastTimeCardsMatch))
+                 //   score += max(Int(10 - value), 1)*2
+                 //   lastTimeCardsMatch = Date()
                 }
-              else if cards[chosenIndex].seen==true || cards[potentialMatchIndex].seen==true {
-                  
-                  //score -=1
-                  value = Int(currentDataTime.distance(to: lastTimeCardsMatch))
-                  score += max(Int(10 - value), 1)*(-1)
+                else {
+                    if cards[chosenIndex].seen > 1 {
+                        score -= 1
+                    }
+                    if cards[potentialMatchIndex].seen > 1 {
+                        score -= 1
+                    }
+                 //  value = Int(currentDataTime.distance(to: lastTimeCardsMatch))
+                 //   score += max(Int(10 - value), 1)*(-1)
                 }
             indexOfTheOneAndOnlyDFaceUpCard = nil
             }
@@ -41,7 +47,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                  for index in cards.indices {
                      if cards[index].isFaceUp == true {
                         cards[index].isFaceUp = false
-                        cards[index].seen = true
                      }
                   }
                 indexOfTheOneAndOnlyDFaceUpCard = chosenIndex
@@ -64,7 +69,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
-        var seen: Bool = false
+        var seen: Int = 0
         var content: CardContent
         var id: Int
     }
