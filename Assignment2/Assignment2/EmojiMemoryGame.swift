@@ -14,16 +14,18 @@ class EmojiMemoryGame: ObservableObject {
 
     init() {
         theme = EmojiMemoryGame.themes.randomElement()!
+        theme.emoji.removeDuplicates()
         theme.emoji.shuffle()
+        
         model = EmojiMemoryGame.createMemoryGame(theme: theme)
     }
     
     static var themes: [Theme] = [
           Theme(name: "Flags", emoji: ["🇺🇸","🏳","🇹🇩","🏳️‍🌈","🇺🇳","🇨🇦","🇪🇺","🇮🇹"], color: "blue", numberOfPairsCards: 4),
-          Theme(name: "Faces", emoji: ["🤩","😍","🥳","😅","🤓","😎","😚","😏","😇"], color: "black", numberOfPairsCards: 8),
+          Theme(name: "Faces", emoji: ["🤩","😍","🥳","😅","🤓","😎","😚","😏","😇"], color: "black", numberOfPairsCards: 5),
           Theme(name: "Animals", emoji: ["🐶","🐻","🐝","🦊","🐥","🐷","🐬","🐙","🐸"], color: "mint", numberOfPairsCards: 6),
-          Theme(themeName: "Fruits", themeEmoji: ["🍏","🍎","🍋","🍉","🥥","🥝","🍒"], themeColor: "pink"),
-          Theme(name: "Cars", emoji: ["🚗","🚙","🚑"], color: "green", numberOfPairsCards: 8),
+          Theme(name: "Fruits", emoji: ["🍏","🍎","🍋","🍉","🥥","🥝","🍒"], color: "pink"),
+          Theme(name: "Cars", emoji: ["🚗","🚗","🚙","🚙"], color: "green", numberOfPairsCards: 2),
           Theme(name: "Travel", emoji: ["✈️","🏝","🌇","🚢","🏙"], color: "gray", numberOfPairsCards: 8)]
   
     var themeColorForCards: Color {
@@ -64,7 +66,10 @@ class EmojiMemoryGame: ObservableObject {
         if theme.name == "Flags" || theme.name == "Travel" {
             numberOfPairsOfCards = Int.random(in: 4...theme.emoji.count)
         }
-        return MemoryGame(numberOfPairsOfCards: numberOfPairsOfCards ?? theme.emoji.count){ theme.emoji[$0]
+        if numberOfPairsOfCards! > theme.emoji.count {
+            numberOfPairsOfCards = theme.emoji.count
+        }
+        return MemoryGame(numberOfPairsOfCards: numberOfPairsOfCards!){ theme.emoji[$0]
         }
    }
     
@@ -83,6 +88,7 @@ class EmojiMemoryGame: ObservableObject {
     func beginNewGame()
     {
         theme = EmojiMemoryGame.themes.randomElement()!
+        theme.emoji.removeDuplicates()
         theme.emoji.shuffle()
         model = EmojiMemoryGame.createMemoryGame(theme: theme)
     }

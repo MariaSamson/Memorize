@@ -13,13 +13,13 @@ struct Theme {
     
     var name: String
     var emoji: [String]
-    var numberOfPairsCards: Int?
     var color: String
+    var numberOfPairsCards: Int?
     
-    init(themeName: String, themeEmoji: [String],themeColor: String) {
-        self.name = themeName
-        self.emoji = themeEmoji
-        self.color = themeColor
+    init(name: String, emoji: [String], color: String) {
+        self.name = name
+        self.emoji = emoji
+        self.color = color
     }
     
     init(name: String, emoji: [String], color: String, numberOfPairsCards: Int) {
@@ -28,5 +28,4 @@ struct Theme {
         self.numberOfPairsCards = numberOfPairsCards > emoji.count ? emoji.count : numberOfPairsCards
         self.color = color
     }
-
 }
