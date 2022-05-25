@@ -26,19 +26,19 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                     
-                 // score += 2
+          //        score += 2
                     value = Int(currentDataTime.distance(to: lastTimeCardsMatch))
                     score += max(Int(10 - value), 1)*2
                     lastTimeCardsMatch = Date()
                 }
                 else {
                     if cards[chosenIndex].seen > 1 {
-                    //  score -= 1
+        //              score -= 1
                         value = Int(currentDataTime.distance(to: lastTimeCardsMatch))
                         score += max(Int(10 - value), 1)*(-1)
                     }
                     if cards[potentialMatchIndex].seen > 1 {
-                     // score -= 1
+          //            score -= 1
                         value = Int(currentDataTime.distance(to: lastTimeCardsMatch))
                         score += max(Int(10 - value), 1)*(-1)
                     }

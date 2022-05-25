@@ -66,10 +66,7 @@ class EmojiMemoryGame: ObservableObject {
         if theme.name == "Flags" || theme.name == "Travel" {
             numberOfPairsOfCards = Int.random(in: 4...theme.emoji.count)
         }
-        if numberOfPairsOfCards! > theme.emoji.count {
-            numberOfPairsOfCards = theme.emoji.count
-        }
-        return MemoryGame(numberOfPairsOfCards: numberOfPairsOfCards!){ theme.emoji[$0]
+        return MemoryGame(numberOfPairsOfCards: numberOfPairsOfCards ?? theme.emoji.count){ theme.emoji[$0]
         }
    }
     
