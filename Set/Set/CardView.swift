@@ -76,7 +76,10 @@ struct CardView: View {
                     Diamond().fill()
                 }
                 else {
-                    Diamond().opacity(0.3)
+                    ZStack{
+                        Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask( Diamond().fill())
+                        Diamond().stroke()
+                    }
                 }
             }
             if card.shape == .oval {
@@ -87,18 +90,24 @@ struct CardView: View {
                     Circle().fill()
                 }
                 else {
-                    Circle().opacity(0.3)
+                    ZStack{
+                        Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask( Circle().fill())
+                        Circle().stroke()
+                    }
                 }
             }
             if card.shape == .rectangle {
                 if card.shading == .outlined {
-                    RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 3)
+                    Squiggle().stroke(lineWidth: 3)
                 }
                 else if card.shading == .solid {
-                    RoundedRectangle(cornerRadius: 5).fill()
+                    Squiggle().fill()
                 }
                 else {
-                    RoundedRectangle(cornerRadius: 5).opacity(0.3)
+                    ZStack{
+                        Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask( Squiggle().fill())
+                        Squiggle().stroke()
+                    }
                 }
             }
         }

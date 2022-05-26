@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
       VStack {
         Text("\(game.statusText)")
-          
+        Text("Score: \(game.score)")
         Spacer()
         newGameCards
         AspectGrid(items: game.cards, aspectRatio: 2/3) { card in

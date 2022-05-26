@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06267AEF283E9FD00073AC67 /* Squiggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06267AEE283E9FD00073AC67 /* Squiggle.swift */; };
+		06267AF1283EA47D0073AC67 /* Stripe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06267AF0283EA47D0073AC67 /* Stripe.swift */; };
 		063C9AB628327DE10040EEDE /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063C9AB528327DE10040EEDE /* SetApp.swift */; };
 		063C9AB828327DE10040EEDE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063C9AB728327DE10040EEDE /* ContentView.swift */; };
 		063C9ABA28327DE40040EEDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 063C9AB928327DE40040EEDE /* Assets.xcassets */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		06267AEE283E9FD00073AC67 /* Squiggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Squiggle.swift; sourceTree = "<group>"; };
+		06267AF0283EA47D0073AC67 /* Stripe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stripe.swift; sourceTree = "<group>"; };
 		063C9AB228327DE10040EEDE /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		063C9AB528327DE10040EEDE /* SetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetApp.swift; sourceTree = "<group>"; };
 		063C9AB728327DE10040EEDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,9 +64,11 @@
 			isa = PBXGroup;
 			children = (
 				063C9AB528327DE10040EEDE /* SetApp.swift */,
+				06267AF0283EA47D0073AC67 /* Stripe.swift */,
 				063C9AB728327DE10040EEDE /* ContentView.swift */,
 				06837F892833B59F00393D34 /* GameViewModel.swift */,
 				063C9AC92832D1120040EEDE /* Game.swift */,
+				06267AEE283E9FD00073AC67 /* Squiggle.swift */,
 				06837F8B2833B7E300393D34 /* CardView.swift */,
 				063C9AC72832CF100040EEDE /* AspectGrid.swift */,
 				063C9AB928327DE40040EEDE /* Assets.xcassets */,
@@ -150,10 +156,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				063C9AB828327DE10040EEDE /* ContentView.swift in Sources */,
+				06267AEF283E9FD00073AC67 /* Squiggle.swift in Sources */,
 				063C9ACA2832D1120040EEDE /* Game.swift in Sources */,
 				063C9AC82832CF100040EEDE /* AspectGrid.swift in Sources */,
 				063C9AB628327DE10040EEDE /* SetApp.swift in Sources */,
 				06837F8C2833B7E300393D34 /* CardView.swift in Sources */,
+				06267AF1283EA47D0073AC67 /* Stripe.swift in Sources */,
 				06837F8A2833B59F00393D34 /* GameViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

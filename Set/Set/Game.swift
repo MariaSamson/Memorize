@@ -12,7 +12,8 @@ struct Game {
     
     private(set) var deck = Deck()
     private(set) var dealedCards: [Card] = []
-   
+    var score : Int = 0
+    
     var cardsRemainingInDeck: Int {
         deck.countRemainingCards
     }
@@ -26,12 +27,11 @@ struct Game {
         return card
     }
     
-    mutating func choose(_ card: Card) -> Bool{
+    mutating func choose(_ card: Card) -> Bool {
         
         let selectedCards = dealedCards.filter { $0.isSelected }
         if selectedCards.count == 3 {
             // Replace matched cards with new ones
-            
             for card in selectedCards {
                 let index = dealedCards.firstIndex(matching: card)
                 if GameViewModel.gameMatchState == .cardsAreMatched {
@@ -60,36 +60,41 @@ struct Game {
                 selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
                 selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
                 GameViewModel.gameMatchState = .cardsAreMatched
+                score += 3
               return true
             } else if selectedCards[0].number != selectedCards[1].number && selectedCards[1].number != selectedCards[2].number &&
                     selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
                     selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
                     selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
                     GameViewModel.gameMatchState = .cardsAreMatched
+                  score += 3
                   return true
             } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
                     selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
                     selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
                     selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
                     GameViewModel.gameMatchState = .cardsAreMatched
+                  self.score += 3
                   return true
             } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
                     selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
                     selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
                     selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
                     GameViewModel.gameMatchState = .cardsAreMatched
+                  self.score += 3
                   return true
             } else if selectedCards[0].number != selectedCards[1].number && selectedCards[1].number != selectedCards[2].number &&
                     selectedCards[0].shape.rawValue != selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue != selectedCards[2].shape.rawValue &&
                     selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
                     selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
                     GameViewModel.gameMatchState = .cardsAreMatched
+                  self.score += 3
                   return true
             } else {
                 GameViewModel.gameMatchState = .cardsAreNotMatched
+                self.score -= 2
             }
         }
-        
         return false
     }
     
@@ -130,7 +135,6 @@ struct Game {
         
         var isFaceUp = true
         var isSelected : Bool = false
-  
     }
 
   struct Deck {

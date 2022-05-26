@@ -12,6 +12,10 @@ class GameViewModel: ObservableObject {
     @Published var model = Game()
     static var gameMatchState: StateOfCards = .notSet
     
+    var score : Int {
+        return model.score
+    }
+    
     //count remaining card in Deck
     var cardsRemaining: Int {
         model.cardsRemainingInDeck
