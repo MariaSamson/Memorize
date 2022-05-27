@@ -32,8 +32,6 @@ struct Diamond:Shape {
 
 struct CardView: View {
     var card: Game.Card
-    //var isMismatched: Bool = true
-
     private let cornerRadius: CGFloat = 10
     private let edgeLineWidth: CGFloat = 4
 
@@ -96,7 +94,7 @@ struct CardView: View {
                     }
                 }
             }
-            if card.shape == .rectangle {
+            if card.shape == .squiggle {
                 if card.shading == .outlined {
                     Squiggle().stroke(lineWidth: 3)
                 }

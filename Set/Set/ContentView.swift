@@ -12,13 +12,17 @@ struct ContentView: View {
 
     var body: some View {
       VStack {
-        Text("\(game.statusText)")
-        Text("Score: \(game.score)")
-        Spacer()
+          HStack {
+            Spacer()
+            Text("\(game.statusText)")
+            Spacer()
+            Text("Score: \(game.score)")
+            Spacer()
+          }
         newGameCards
         AspectGrid(items: game.cards, aspectRatio: 2/3) { card in
             CardView(card: card)
-                .padding(13)
+                .padding(5)
                 .animation(.linear(duration: 1), value: 1.0)
                 .onTapGesture {
                     withAnimation {
@@ -31,8 +35,12 @@ struct ContentView: View {
         .onAppear {
             self.newGame()
         }
-        dealCards
-        .disabled(game.cardsRemaining == 0)
+        HStack {
+            Spacer()
+            dealCards
+            .disabled(game.cardsRemaining == 0)
+            Spacer()
+        }
       }
     }
    
@@ -45,7 +53,7 @@ struct ContentView: View {
     }
     
     var dealCards: some View {
-         VStack{
+         VStack {
             Button {
                 game.dealMoreCards()
              } label: {

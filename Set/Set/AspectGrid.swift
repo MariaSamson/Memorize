@@ -28,7 +28,6 @@ struct AspectGrid<Item, ItemView>: View where ItemView: View, Item: Identifiable
                     }
                 }
             }
-            
         }
     }
     
