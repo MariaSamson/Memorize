@@ -61,7 +61,7 @@ struct CardView: View {
             }
         }
         .foregroundColor(cardColor)
-        .scaleEffect(card.isSelected ? 1.2 : 1) //zoom when touch the card
+        .scaleEffect(card.isSelected ? 1.1 : 1) //zoom when touch the card
     }
 
     var symbol: some View {
@@ -74,13 +74,10 @@ struct CardView: View {
                     Diamond().fill()
                 }
                 else {
-                    ZStack{
-                        Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask( Diamond().fill())
-                        Diamond().stroke()
-                    }
+                    Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask(Diamond().fill())
                 }
             }
-            if card.shape == .oval {
+            if card.shape == .circle {
                 if card.shading == .outlined {
                     Circle().stroke(lineWidth: 3)
                 }
@@ -88,10 +85,7 @@ struct CardView: View {
                     Circle().fill()
                 }
                 else {
-                    ZStack{
-                        Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask( Circle().fill())
-                        Circle().stroke()
-                    }
+                   Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask(Circle().fill())
                 }
             }
             if card.shape == .squiggle {
@@ -102,10 +96,7 @@ struct CardView: View {
                     Squiggle().fill()
                 }
                 else {
-                    ZStack{
-                        Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask( Squiggle().fill())
-                        Squiggle().stroke()
-                    }
+                    Stripe(width: Int(1.0)).stroke(lineWidth: 1.0).mask(Squiggle().fill())
                 }
             }
         }

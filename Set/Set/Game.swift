@@ -14,6 +14,7 @@ struct Game {
     private(set) var dealedCards: [Card] = []
     private(set) var timeLastThreeCardsWereChosen = Date()
     var score : Int = 0
+    let maxNumberOfSeconds: Int = 30
     
     var cardsRemainingInDeck: Int {
         deck.countRemainingCards
@@ -28,105 +29,79 @@ struct Game {
         return card
     }
     
-    mutating func choose(_ card: Card) -> Bool {
-        let selectedCards = dealedCards.filter { $0.isSelected }
-        if selectedCards.count == 3 {
-            let timeWhenNewSetWasFound = Date()
-            let timeSpent = Int(timeWhenNewSetWasFound.timeIntervalSince(timeLastThreeCardsWereChosen))
-            // Replace matched cards with new ones
-            for card in selectedCards {
-                let index = dealedCards.firstIndex(matching: card)
-                if GameViewModel.gameMatchState == .cardsAreMatched {
-                    score += 2 * max(30 - timeSpent, 1)
-                    dealedCards.remove(at: index!)
-                    if let newCard = deck.drawCard() {
-                        dealedCards.insert(newCard, at: index!)
-                    }
-                } else {
-                    dealedCards[index!].isSelected.toggle()
-                    score -= 2 * max(30 - timeSpent, 1)
-                }
-            }
-            timeLastThreeCardsWereChosen = timeWhenNewSetWasFound
-        }
-  
-        let index = dealedCards.firstIndex(matching: card)
-        dealedCards[index ?? 0].isSelected.toggle()
-        
-        return checkIfCardsMatch()
+    mutating func choose(_ card: Card) {
+        let timeWhenNewSetWasFound = Date()
+        let timeSpent = Int(timeWhenNewSetWasFound.timeIntervalSince(timeLastThreeCardsWereChosen))
+        replaceCards(card, time: timeSpent)
+        timeLastThreeCardsWereChosen = timeWhenNewSetWasFound
+        checkIfCardsMatch()
     }
     
-    mutating func checkIfCardsMatch() -> Bool {
+    private mutating func replaceCards(_ card: Card, time: Int) {
+        let selectedCards = dealedCards.filter { $0.isSelected }
+        if selectedCards.count == 3 {
+            for card in selectedCards {
+                if let index = dealedCards.firstIndex(matching: card) {
+                    if GameViewModel.gameMatchState == .cardsAreMatched {
+                        score += calculateNewScore(time)
+                        dealedCards.remove(at: index)
+                        if let newCard = deck.drawCard() {
+                            dealedCards.insert(newCard, at: index)
+                        }
+                    } else {
+                        dealedCards[index].isSelected.toggle()
+                        score -= calculateNewScore(time)
+                    }
+                }
+            }
+        }
+        if let index = dealedCards.firstIndex(matching: card) {
+            dealedCards[index].isSelected.toggle()
+        }
+    }
+    
+    private func calculateNewScore(_ playedSeconds : Int) -> Int {
+        2 * max(maxNumberOfSeconds - playedSeconds, 1)
+    }
+    
+    private func checkIfCardsMatch() {
         GameViewModel.gameMatchState = .notSet
         let selectedCards = dealedCards.filter { $0.isSelected }
         if selectedCards.count == 3 {
-            
-            if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
-                selectedCards[0].shape.rawValue != selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue != selectedCards[2].shape.rawValue &&
-                selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
-                selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
+            let numbers = Int(selectedCards[0].number.rawValue + selectedCards[1].number.rawValue + selectedCards[2].number.rawValue)
+            let shapes = Int(selectedCards[0].shape.rawValue + selectedCards[1].shape.rawValue + selectedCards[2].shape.rawValue)
+            let shadings = Int(selectedCards[0].shading.rawValue + selectedCards[1].shading.rawValue + selectedCards[2].shading.rawValue)
+            let colorss = Int(selectedCards[0].color.rawValue + selectedCards[1].color.rawValue + selectedCards[2].color.rawValue)
+            if (numbers + shapes + shadings + colorss) % 3 == 0 {
                 GameViewModel.gameMatchState = .cardsAreMatched
-                //self.score += 3
-              return true
-            } else if selectedCards[0].number != selectedCards[1].number && selectedCards[1].number != selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-                 // self.score += 3
-                  return true
-            } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-                //  self.score += 3
-                  return true
-            } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-                 // self.score += 3
-                  return true
-            } else if selectedCards[0].number != selectedCards[1].number && selectedCards[1].number != selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue != selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue != selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-               //   self.score += 3
-                  return true
             } else {
-                GameViewModel.gameMatchState = .cardsAreNotMatched
-                self.score -= 2
-            }
+            GameViewModel.gameMatchState = .cardsAreNotMatched
         }
-        return false
     }
+}
 
     enum Number: Int, CaseIterable, Hashable {
         case one = 1, two, three
     }
 
-    enum Color: String, CaseIterable, Hashable {
-        case blue = "blue", purple = "purple", green = "green"
+    enum Color: Int, CaseIterable, Hashable {
+        case blue = 1, purple = 2, green = 3
     }
 
-    enum Shading: String, CaseIterable, Hashable {
-        case solid, stripped, outlined
+    enum Shading: Int, CaseIterable, Hashable {
+        case solid = 1, stripped = 2, outlined = 3
     }
 
-    enum Shape: String, CaseIterable, Hashable, CustomStringConvertible {
-        case oval , squiggle, diamond
-
-        var description: String {
+    enum Shape: Int, CaseIterable, Hashable {
+        case circle , squiggle, diamond
+        var description: Int {
             switch self {
-                case .oval:
-                    return "O"
+                case .circle:
+                    return 1
                 case .squiggle:
-                    return "〰"
+                    return 2
                 case .diamond:
-                    return "◇"
+                    return 3
             }
         }
     }
@@ -137,7 +112,6 @@ struct Game {
         var color: Color
         var shape: Shape
         var shading: Shading
-        
         var isFaceUp = true
         var isSelected : Bool = false
     }

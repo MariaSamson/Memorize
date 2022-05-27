@@ -28,9 +28,7 @@ struct ContentView: View {
                     withAnimation {
                         game.choose(card)
                     }
-                   
                 }
-    
         }
         .onAppear {
             self.newGame()
@@ -71,7 +69,7 @@ struct ContentView: View {
             } label: {
             VStack {
                Text("New Game")
-                   }
+                }
              }
           }
      }
