@@ -68,11 +68,11 @@ struct Game {
         GameViewModel.gameMatchState = .notSet
         let selectedCards = dealedCards.filter { $0.isSelected }
         if selectedCards.count == 3 {
-            let numbers = Int(selectedCards[0].number.rawValue + selectedCards[1].number.rawValue + selectedCards[2].number.rawValue)
-            let shapes = Int(selectedCards[0].shape.rawValue + selectedCards[1].shape.rawValue + selectedCards[2].shape.rawValue)
-            let shadings = Int(selectedCards[0].shading.rawValue + selectedCards[1].shading.rawValue + selectedCards[2].shading.rawValue)
-            let colorss = Int(selectedCards[0].color.rawValue + selectedCards[1].color.rawValue + selectedCards[2].color.rawValue)
-            if (numbers + shapes + shadings + colorss) % 3 == 0 {
+            let cardNumbers = Int(selectedCards[0].number.rawValue + selectedCards[1].number.rawValue + selectedCards[2].number.rawValue)
+            let cardShapes = Int(selectedCards[0].shape.rawValue + selectedCards[1].shape.rawValue + selectedCards[2].shape.rawValue)
+            let cardShadings = Int(selectedCards[0].shading.rawValue + selectedCards[1].shading.rawValue + selectedCards[2].shading.rawValue)
+            let cardColors = Int(selectedCards[0].color.rawValue + selectedCards[1].color.rawValue + selectedCards[2].color.rawValue)
+            if (cardNumbers + cardShapes + cardShadings + cardColors) % 3 == 0 {
                 GameViewModel.gameMatchState = .cardsAreMatched
             } else {
             GameViewModel.gameMatchState = .cardsAreNotMatched
