@@ -12,6 +12,7 @@ struct Game {
     
     private(set) var deck = Deck()
     private(set) var dealedCards: [Card] = []
+    private(set) var matchedCards: [Card] = []
     private(set) var allCards: [Card] = []
     private(set) var discardedCards: [Card] = []
    
@@ -28,33 +29,33 @@ struct Game {
         return card
     }
     
-    mutating func choose(_ card: Card) -> Bool {
+    mutating func choose(_ card: Card) {
         let selectedCards = dealedCards.filter { $0.isSelected }
         if selectedCards.count == 3 {
             // Replace matched cards with new ones
-            
             for card in selectedCards {
-                let index = dealedCards.firstIndex(matching: card)
-                if GameViewModel.gameMatchState == .cardsAreMatched {
-                    dealedCards.remove(at: index!)
-                    discardedCards.append(card)
-//                    if let newCard = deck.drawCard() {
-//                        dealedCards.insert(newCard, at: index!)
-//                    }
-                }
-                else {
-                    dealedCards[index!].isSelected.toggle()
-                }
+                replaceCards(card)
             }
         }
-  
-        let index = dealedCards.firstIndex(matching: card)
-        dealedCards[index ?? 0].isSelected.toggle()
+        if let index = dealedCards.firstIndex(matching: card) {
+            dealedCards[index].isSelected.toggle()}
         
-        return checkIfCardsMatch()
+        checkIfCardsMatch()
     }
     
-    mutating func checkIfCardsMatch() -> Bool {
+    mutating func replaceCards(_ card: Card) {
+        _ = dealedCards.filter { $0.isSelected }
+        if let index = dealedCards.firstIndex(matching: card) {
+            if GameViewModel.gameMatchState == .cardsAreMatched {
+                dealedCards.remove(at: index)
+                discardedCards.append(card)
+            } else {
+                dealedCards[index].isSelected.toggle()
+            }
+        }
+    }
+    
+    mutating func checkIfCardsMatch() {
         GameViewModel.gameMatchState = .notSet
         let selectedCards = dealedCards.filter { $0.isSelected }
         if selectedCards.count == 3 {
@@ -63,38 +64,46 @@ struct Game {
                 selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
                 selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
                 GameViewModel.gameMatchState = .cardsAreMatched
-              return true
+                for card in selectedCards {
+                    replaceCards(card)
+                }
             } else if selectedCards[0].number != selectedCards[1].number && selectedCards[1].number != selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-                  return true
+                        selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
+                        selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
+                        selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
+                GameViewModel.gameMatchState = .cardsAreMatched
+                for card in selectedCards {
+                    replaceCards(card)
+                }
             } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-                  return true
+                        selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
+                        selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
+                        selectedCards[0].shading.rawValue == selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue == selectedCards[2].shading.rawValue {
+                GameViewModel.gameMatchState = .cardsAreMatched
+                for card in selectedCards {
+                    replaceCards(card)
+                }
             } else if selectedCards[0].number == selectedCards[1].number && selectedCards[1].number == selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-                  return true
+                        selectedCards[0].shape.rawValue == selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue == selectedCards[2].shape.rawValue &&
+                        selectedCards[0].color.rawValue == selectedCards[1].color.rawValue && selectedCards[1].color.rawValue == selectedCards[2].color.rawValue &&
+                        selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
+                GameViewModel.gameMatchState = .cardsAreMatched
+                for card in selectedCards {
+                    replaceCards(card)
+                }
             } else if selectedCards[0].number != selectedCards[1].number && selectedCards[1].number != selectedCards[2].number &&
-                    selectedCards[0].shape.rawValue != selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue != selectedCards[2].shape.rawValue &&
-                    selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
-                    selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
-                    GameViewModel.gameMatchState = .cardsAreMatched
-                  return true
+                        selectedCards[0].shape.rawValue != selectedCards[1].shape.rawValue && selectedCards[1].shape.rawValue != selectedCards[2].shape.rawValue &&
+                        selectedCards[0].color.rawValue != selectedCards[1].color.rawValue && selectedCards[1].color.rawValue != selectedCards[2].color.rawValue &&
+                        selectedCards[0].shading.rawValue != selectedCards[1].shading.rawValue && selectedCards[1].shading.rawValue != selectedCards[2].shading.rawValue {
+                GameViewModel.gameMatchState = .cardsAreMatched
+                for card in selectedCards {
+                    replaceCards(card)
+                }
             } else {
                 GameViewModel.gameMatchState = .cardsAreNotMatched
             }
         }
-        return false
     }
-    
     
     enum Number: Int, CaseIterable, Hashable {
         case one = 1, two, three

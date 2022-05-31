@@ -18,18 +18,19 @@ struct ContentView: View {
         Text("\(game.statusText)")
         Spacer()
         AspectGrid(items: game.cards, aspectRatio: 2/3) { card in
-            CardView(card: card,isUndealt: false)
+            CardView(card: card, isUndealt: false)
                 .padding(5)
-                .animation(.linear(duration: 1), value: 1.0)
+                .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                .matchedGeometryEffect(id: card.id * 100, in: discardSpace)
                 .rotationEffect(Angle.degrees(GameViewModel.gameMatchState == .cardsAreMatched ? 360 : 0))
                 .rotationEffect(Angle.degrees(GameViewModel.gameMatchState == .cardsAreNotMatched ? 5 : 0))
                 .onTapGesture {
-                    withAnimation {
+                    withAnimation(.easeInOut) {
                         getPiledCards()
                         game.choose(card)
                     }
                 }
-                
+      
          }
           HStack {
               Spacer()
@@ -64,8 +65,6 @@ struct ContentView: View {
     private func getPiledCards() {
         if GameViewModel.gameMatchState == .cardsAreMatched {
           for card in game.allCards {
-              //var dup = card
-             // dup.isMatched = false
               if !matchedCards.contains(card) {
                   matchedCards.append(card)
               }
@@ -76,8 +75,7 @@ struct ContentView: View {
     var deckBody: some View {
         ZStack {
             ForEach(game.cards.filter(isUndealt)) { card in
-                CardView(card: card,isUndealt: true)
-                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                CardView(card: card, isUndealt: true)
                     .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
                     .zIndex(zIndex(of: card))
             }
@@ -87,8 +85,8 @@ struct ContentView: View {
             withAnimation {
                getPiledCards()
             }
-            withAnimation(.linear(duration: 0.3).delay(0.25)) {
-                game.dealMoreCards()
+            withAnimation(.linear(duration: 0.9).delay(0.2)) {
+                 game.dealMoreCards()
             }
         }
     }
@@ -109,7 +107,7 @@ struct ContentView: View {
     }
     
     func dealMoreCards() {
-        self.game.drawCard(3)
+        self.game.dealMoreCards()
     }
     
     var restart: some View {

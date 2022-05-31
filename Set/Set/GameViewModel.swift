@@ -20,7 +20,7 @@ class GameViewModel: ObservableObject {
     var allCards: [Game.Card] {
         model.allCards
     }
-    
+
     var cards: [Game.Card] {
         return model.dealedCards
     }

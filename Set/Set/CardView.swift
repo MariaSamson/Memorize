@@ -32,7 +32,6 @@ struct Diamond:Shape {
 
 struct CardView: View {
     var card: Game.Card
-    //var isMismatched: Bool = true
     var isUndealt : Bool
 
     private let cornerRadius: CGFloat = 10
