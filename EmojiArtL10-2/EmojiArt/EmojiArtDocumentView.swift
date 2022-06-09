@@ -25,14 +25,14 @@ struct EmojiArtDocumentView: View {
             }
         }
     }
- 
+    
     var documentBody: some View {
         GeometryReader { geometry in
             ZStack {
                 Color.white.overlay(
                     OptionalImage(uiImage: document.backgroundImage)
                         .scaleEffect(zoomScale)
-                       // .position(convertFromEmojiCoordinates((0,0), in: geometry))
+                    // .position(convertFromEmojiCoordinates((0,0), in: geometry))
                         .offset(self.panOffset)
                 )
                 .gesture(doubleTapToZoom(in: geometry.size))
@@ -41,13 +41,15 @@ struct EmojiArtDocumentView: View {
                 } else {
                     ForEach(self.document.emojis) { emoji in
                         Text(emoji.text)
-                            .font(.system(size: 100))
+                        // .font(.system(size: 100))
+                            .animatableSystemFont(size: self.scale(for: emoji))
                             .border(Color.purple, width: self.selectedEmojis.contains(matching: emoji) ? 3 : 0)
                             .background(Color.purple.opacity(self.selectedEmojis.contains(matching: emoji) ? 0.1 : 0))
                             .position(self.position(for: emoji, in: geometry))
                             .gesture(self.tapToSelect(emoji: emoji))
-                          //  .gesture(self.panEmojiGesture(emoji: emoji))
-                            .gesture(self.panGesture())
+                            .gesture(self.panEmojiGesture(emoji: emoji))
+                        //   .gesture(self.panGesture())
+                        
                         
                     }
                     //.gesture(self.tapToDeselect())
@@ -86,7 +88,7 @@ struct EmojiArtDocumentView: View {
             )
         }
     }
-
+    
     
     // MARK: - Drag and Drop
     
@@ -116,8 +118,8 @@ struct EmojiArtDocumentView: View {
     }
     
     // MARK: - Positioning/Sizing Emoji
-  
-
+    
+    
     private func position(for emoji: EmojiArtModel.Emoji, in geometry: GeometryProxy) -> CGPoint {
         convertFromEmojiCoordinates((emoji.x, emoji.y), in: geometry)
     }
@@ -141,6 +143,14 @@ struct EmojiArtDocumentView: View {
             x: center.x + CGFloat(location.x) * zoomScale + panOffset.width,
             y: center.y + CGFloat(location.y) * zoomScale + panOffset.height
         )
+    }
+    
+    private func scale(for emoji: EmojiArtModel.Emoji) -> CGFloat {
+        if selectedEmojis.contains(matching: emoji){
+            return CGFloat(emoji.size) * self.zoomScale * self.gestureZoomScaleEmoji
+        } else {
+            return CGFloat(emoji.size) * self.zoomScale
+        }
     }
     
     // MARK: - Zooming
@@ -210,6 +220,7 @@ struct EmojiArtDocumentView: View {
                 self.selectedEmojis.removeAll()
             }
     }
+    
     // MARK: - Pan Gesture (Emoji)
     @State private var singleEmoji: EmojiArtModel.Emoji?
     
@@ -227,9 +238,9 @@ struct EmojiArtDocumentView: View {
             }
             .updating($gesturePanOffsetEmoji) { latestDragGestureValue, gesturePanOffsetEmoji, transaction in
                 if selectedEmojis.contains(matching: emoji) {
-                    gesturePanOffsetEmoji = latestDragGestureValue.translation
+                    gesturePanOffsetEmoji = latestDragGestureValue.translation / zoomScale
                 } else {
-                    gesturePanOffsetEmoji = latestDragGestureValue.translation
+                    gesturePanOffsetEmoji = latestDragGestureValue.translation / zoomScale
                 }
             }
             .onEnded { finalDragGestureValue in
@@ -242,8 +253,8 @@ struct EmojiArtDocumentView: View {
                 }
             }
     }
-
- 
+    
+    
     // MARK: - Panning
     
     @State private var steadyStatePanOffset: CGSize = CGSize.zero
@@ -255,14 +266,14 @@ struct EmojiArtDocumentView: View {
     
     private func panGesture() -> some Gesture {
         DragGesture()
-            .updating($gesturePanOffset) { latestDragGestureValue, gesturePanOffset, _ in
+            .updating($gesturePanOffset) { latestDragGestureValue, gesturePanOffset, transaction in
                 gesturePanOffset = latestDragGestureValue.translation / zoomScale
             }
             .onEnded { finalDragGestureValue in
                 steadyStatePanOffset = steadyStatePanOffset + (finalDragGestureValue.translation / zoomScale)
             }
     }
-
+    
     // MARK: - Palette
     
     var palette: some View {
@@ -270,12 +281,12 @@ struct EmojiArtDocumentView: View {
             .font(.system(size: defaultEmojiFontSize))
     }
     
-    let testEmojis = "😀😷🦠💉👻👀🐶🌲🌎🌞🔥🍎⚽️🚗🚓🚲🛩🚁🚀🛸🏠⌚️🎁🗝🔐❤️⛔️❌❓✅⚠️🎶➕➖🏳️"
+    let testEmojis = "😀👻👀🐶🌲🌎🌞🔥🍎⚽️🚗🚓🚲🛩🚁🚀🛸🏠⌚️🎁🗝🔐❤️⛔️❌❓✅⚠️🎶➕➖🏳️"
 }
 
 struct ScrollingEmojisView: View {
     let emojis: String
-
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
