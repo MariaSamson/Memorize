@@ -8,26 +8,48 @@
 import SwiftUI
 
 struct EmojiThemeEditor: View {
-    
     @Binding var emojiTheme: Theme
-    
+    @State private var bgColor = Color.blue.opacity(0.5)
     var body: some View {
         Form {
             nameSection
             addEmojisSection
             removeEmojiSection
+            cardSection
+            colorSection
         }
         .navigationTitle("Edit \(emojiTheme.name)")
         .frame(minWidth: 300, minHeight: 350)
     }
     
     var nameSection: some View {
-        Section(header: Text("Name")) {
+        Section(header: Text("Theme Name")) {
             TextField("Name", text: $emojiTheme.name)
         }
     }
     
+
     @State private var emojisToAdd = ""
+    
+    var colorSection: some View {
+     Section {
+         ColorPicker("Color", selection: $bgColor)
+     }
+     header: {
+        Text("Card")
+      }
+    }
+    
+    var cardSection: some View {
+        Section {
+            Text("\(emojiTheme.numberOfPairsCards ?? 0) pairs")
+        }
+        header: {
+           Text("Card Count")
+         }
+        
+    }
+
     
     var addEmojisSection: some View {
         Section(header: Text("Add Emojis")) {
@@ -47,7 +69,6 @@ struct EmojiThemeEditor: View {
     
     var removeEmojiSection: some View {
         Section {
-            let emojis = emojiTheme.emoji
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))]) {
                 ForEach(emojiTheme.emoji.removingDuplicateCharacters.map { String($0) }, id: \.self) { emoji in
                     Text(emoji)
@@ -59,6 +80,12 @@ struct EmojiThemeEditor: View {
                 }
             }
             .font(.system(size: 40))
+        } header: {
+            HStack {
+                Text("Emojis in use")
+                Spacer()
+                Text("Tap to remove")
+            }
         }
     }
 }

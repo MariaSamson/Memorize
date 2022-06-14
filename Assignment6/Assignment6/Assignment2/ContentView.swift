@@ -86,17 +86,16 @@ struct CardView: View {
                     }
                 }
                 .padding(5)
-                .opacity(0.4)
-                .transition(.scale)
-                
+                .opacity(0.5)
                 Text(card.content)
                     .font(Font.system(size: fontSize(for: size)))
                     .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
                     // Need to check whether card.isMatched as Animation is reused
-                    .animation(card.isMatched ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default)
+                    .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
+                
             }
             .cardify(isFaceUp: card.isFaceUp)
-            .transition(AnyTransition.scale)
+           // .transition(AnyTransition.scale)
         }
        }
     // MARK: - Drawing Constants

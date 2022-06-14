@@ -69,11 +69,9 @@ struct EmojiThemeChooserView: View {
     }
     
     var addButton: some View {
-        Button {
-         //   themeToAdd = EmojiTheme(name: "", emojis: "", color: .blue)
-        } label: {
-            Image(systemName: "plus")
-        }
+        Button(action: { store.thm.append(Theme(name: "Cars", emoji: "🚗🚕🚙🚌🚎", color: "blue", numberOfPairsCards: 4)) },
+               label: { Image(systemName: "plus").imageScale(.large) })
+        .opacity(editMode == .inactive ? 1 : 0)
     }
     
     func game(for theme: Theme) -> EmojiMemoryGame? {

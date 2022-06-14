@@ -30,3 +30,4 @@ struct Theme: Identifiable, Hashable, Codable {
         self.color = color
     }
 }
+
