@@ -33,7 +33,7 @@ class GameViewModel: ObservableObject {
 
     func newGame() {
         model = Game()
-        drawCard(12)
+        drawCard(20)
     }
     
     func choose(_ card: Game.Card) {
@@ -41,7 +41,10 @@ class GameViewModel: ObservableObject {
     }
     
     func dealMoreCards() {
-        drawCard(3)
+        model.dealCards()
+        if GameViewModel.gameMatchState == .cardsAreNotMatched ||  GameViewModel.gameMatchState == .notSet {
+            drawCard(3)
+        }
     }
      
     var statusText: String {

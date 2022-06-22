@@ -53,7 +53,7 @@ struct CardView: View {
                     .stroke(lineWidth: edgeLineWidth)
 
                 VStack {
-                    ForEach(0..<symbolCount,id: \.self) { _ in
+                    ForEach(0..<symbolCount, id: \.self) { _ in
                         self.symbol
                     }
                 }

@@ -12,9 +12,8 @@ struct Game {
     
     private(set) var deck = Deck()
     private(set) var dealedCards: [Card] = []
-    private(set) var timeLastThreeCardsWereChosen = Date()
+    private(set) var timeLastCardWasChosen = Date()
     var score : Int = 0
-    let maxNumberOfSeconds: Int = 30
     
     var cardsRemainingInDeck: Int {
         deck.countRemainingCards
@@ -30,38 +29,56 @@ struct Game {
     }
     
     mutating func choose(_ card: Card) {
-        let timeWhenNewSetWasFound = Date()
-        let timeSpent = Int(timeWhenNewSetWasFound.timeIntervalSince(timeLastThreeCardsWereChosen))
-        replaceCards(card, time: timeSpent)
-        timeLastThreeCardsWereChosen = timeWhenNewSetWasFound
-        checkIfCardsMatch()
-    }
-    
-    private mutating func replaceCards(_ card: Card, time: Int) {
-        let selectedCards = dealedCards.filter { $0.isSelected }
-        if selectedCards.count == 3 {
-            for card in selectedCards {
-                if let index = dealedCards.firstIndex(matching: card) {
-                    if GameViewModel.gameMatchState == .cardsAreMatched {
-                        score += calculateNewScore(time)
-                        dealedCards.remove(at: index)
-                        if let newCard = deck.drawCard() {
-                            dealedCards.insert(newCard, at: index)
-                        }
-                    } else {
-                        dealedCards[index].isSelected.toggle()
-                        score -= calculateNewScore(time)
-                    }
-                }
-            }
+        let currentTime = Date()
+        let timeSpent = Int(currentTime.timeIntervalSince(timeLastCardWasChosen))
+        verifyIfSetWasCards(time: timeSpent) { (playedSeconds) in
+            return 2 * max(30 - playedSeconds, 1)
         }
         if let index = dealedCards.firstIndex(matching: card) {
             dealedCards[index].isSelected.toggle()
         }
+        timeLastCardWasChosen = currentTime
+        checkIfCardsMatch()
     }
     
-    private func calculateNewScore(_ playedSeconds : Int) -> Int {
-        2 * max(maxNumberOfSeconds - playedSeconds, 1)
+    private mutating func verifyIfSetWasCards(time: Int, calculate: (Int) -> Int) {
+        let selectedCards = dealedCards.filter { $0.isSelected }
+        if selectedCards.count == 3 {
+            for selectedCard in selectedCards {
+                if let index = dealedCards.firstIndex(matching: selectedCard) {
+                    if GameViewModel.gameMatchState == .cardsAreMatched {
+                        score += calculate(time)
+                        removeAndReplaceCards(index)
+                    } else {
+                        dealedCards[index].isSelected.toggle()
+                        score -= calculate(time)
+                    }
+                }
+            }
+        }
+    }
+    
+    mutating func dealCards() {
+        let selectedCards = dealedCards.filter { $0.isSelected }
+        if selectedCards.count == 3 {
+            for selectedCard in selectedCards {
+                if let index = dealedCards.firstIndex(matching: selectedCard) {
+                    if GameViewModel.gameMatchState == .cardsAreMatched {
+                        removeAndReplaceCards(index)
+                    }
+                    else if GameViewModel.gameMatchState == .notSet || GameViewModel.gameMatchState == .cardsAreNotMatched {
+                          
+                    }
+                }
+            }
+        }
+    }
+
+    private mutating func removeAndReplaceCards(_ index: Int) {
+        dealedCards.remove(at: index)
+        if let newCard = deck.drawCard() {
+            dealedCards.insert(newCard, at: index)
+        }
     }
     
     private func checkIfCardsMatch() {
@@ -75,10 +92,10 @@ struct Game {
             if (cardNumbers + cardShapes + cardShadings + cardColors) % 3 == 0 {
                 GameViewModel.gameMatchState = .cardsAreMatched
             } else {
-            GameViewModel.gameMatchState = .cardsAreNotMatched
+                GameViewModel.gameMatchState = .cardsAreNotMatched
+            }
         }
-    }
-}
+   }
 
     enum Number: Int, CaseIterable, Hashable {
         case one = 1, two, three
@@ -118,7 +135,6 @@ struct Game {
 
   struct Deck {
         private var cards: [Card] = []
-        
         init() {
             for number in Number.allCases {
                 for color in Color.allCases {
